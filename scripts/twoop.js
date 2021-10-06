@@ -2,182 +2,80 @@
 export function evalu(inputStr) {
     let str = inputStr.join('');
     console.log('input string into eval' + str);
-    var operandList = getListOfOperands(str);
-   // console.log(operandList);
-    var opList = getListOfOperators(str);
-   // console.log('ops'+opList);
+    var newStrArray=str.split(/([+,/,*,%,^,-])/); 
+//     var operandList = getListOfOperands(str);
+//    // console.log(operandList);
+//     var opList = getListOfOperators(str);
+//    // console.log('ops'+opList);
     
-    var newStrArray = getNewArray(str,operandList, opList);
+//     var newStrArray = getNewArray(str,operandList, opList);
     console.log('Full array after operators' + newStrArray);
-    var clearedUnaryStr = clearUnary(newStrArray);
+    var clearedUnaryStr = clearUnary1(newStrArray);
     console.log('after unary operator' + clearedUnaryStr);
     var indexofDivOp = [];
     var indexofMulOP = [];
+    let indexofPowOP=[];
     var indexOfAddOp = [];
     var indexOfSubOp = [];
     var strArray = clearedUnaryStr.filter(e => { if (e != '') return e });
     console.log("before opearions" + strArray);
-    var divisionResult = division(strArray);
+    let resultOfPower=powerOf(strArray);
+     console.log('Power reusult'+resultOfPower);
+    var divisionResult = division(resultOfPower);
     //var divisionResult=division(clearedUnaryStr);
     console.log("Division Result:" + divisionResult);
     var multiplyRes = multiply(divisionResult);
     console.log("Multiply result :" + multiplyRes);
     var total = addsub(multiplyRes);
 
-
-
-
-
-
-    function getListOfOperands(str) 
-    {
-     if(str!=null)
-        {
-        let strArray1 = str.split(/[-,+,*,/,%]+/);
-        let strArray = strArray1.filter(e => { if (e != '') return e });
-        let uniStrArray=[...new Set(strArray)];
-        console.log(strArray);
-        let listOfOperands = [];
-        class Operand {
-            constructor(number, location) {
-                this.number = Number(number);
-                this.location = location;
-            }
-        }
-        for(let i=0;i<uniStrArray.length;i++)
-        {
-          debugger;
-            let opLocation=[];
-          
-            
-            for (let j = 0; j < str.length; ++j) {
-              
-              
-              if (str.substring(j, j + uniStrArray[i].length) === uniStrArray[i]) {
-                opLocation.push(j);
-               
-
-              }
-            
-             
-        }
-         let operand= new Operand(uniStrArray[i],opLocation);
-        console.log('operand'+operand);
-        listOfOperands.push(operand);
-      
-      
-
-       
-    }
-    console.log('inside the function'+listOfOperands);
-    return listOfOperands;
-}
-    }
     
+ //   let resultOfPower=powerOf(nos);
+     function powerOf(strArray) {
+        if(strArray.includes('^'))
+        { debugger;
+        if (strArray.length > 0) {
+            for (let i = 0; i < strArray.length; i++) {
+                if (strArray[i] === '^') {
+                    //  console.log("index of operator"+i)
+                    indexofPowOP.push(i);
+                }
+            }
     
-
-    function getListOfOperators(str) {
-        let opList = [];
-        class Operator{
-        constructor (operator, opposition, opno) {
-            this.operator = operator;
-            this.opposition = opposition;
-            this.opno = opno;
-        }
-        }
-        let opCount = 0;
-        let opLocation;
-
-        for (let i = 0; i < str.length; i++) {
-            switch (str[i]) {
-                case '+':
-                    opCount++;
-
-                    let opObject1 = new Operator('+', i, opCount);
-                    opList.push(opObject1);
-                    break;
-                case '-':
-                    //    if(i>0){
-                    //         if('+-*%/'.lastIndexOf(str[i-1])===0||str[i-1]!=='')
-                    opCount++;
-
-                    let opObject2 = new Operator('-', i, opCount);
-                    opList.push(opObject2);
-                    // }
-
-
-
-                    break;
-                case '*':
-                    opCount++;
-
-                    let opObject3 = new Operator('*', i, opCount);
-                    opList.push(opObject3);
-                    break;
-                case '/':
-                    opCount++;
-
-
-                    let opObject4 = new Operator('/', i, opCount);
-                    opList.push(opObject4);
-                    break;
-                case '%':
-                    opCount++;
-                    opLocation = i;
-
-
-                    let opObject5 = new Operator('%', i, opCount);
-                    opList.push(opObject5);
-                    break;
-                case ')':
-                    opCount++;
-                    opLocation = i;
-
-                    let opObject6 = new Operator('+', i, opCount);
-                    opList.push(opObject6);
-                    break;
-                case ')':
-                    opCount++;
-                    opLocation = i;
-                    //var opObject={'opNO':opCount,'opObject.op':'(','opObject':opLocation};
-
-                    let opObject7 = new Operator('+', i, opCount);
-                    opList.push(opObject7);
-                    break;
+            console.log(strArray);
+            if (indexofPowOP.length > 0) {
+                var left = indexofPowOP[0] - 1;
+                var right = indexofPowOP[0] + 1;
+                var index = indexofPowOP[0];
+                for (let i = 0; i < indexofPowOP.length; i++) {
+    
+                    let powerResult=1;
+                    for(let i=0;i<strArray[right];i++)
+                    {
+                    powerResult=powerResult* strArray[left] 
+                    }
+                    // console.log(strArray[left]+"*"+strArray[right]+"=");
+                    // console.log(divresult);
+                    strArray.splice(left, 3, powerResult);
+    
+                    // console.log("Array after opearion no "+i+" : " +strArray);
+                    index = Number(indexofPowOP[i + 1]);
+                    left = index - 2 * (i + 1) - 1;
+                    //console.log("left of index :"+left);
+                    right = index - 2 * (i + 1) + 1;
+    
+                    //   console.log(a);
+                }
             }
-
+            return strArray;
         }
-
-
-        return opList;
+    }return strArray;
     }
-  
-    function getNewArray(str,operandList,opList) {
-        let arrLen=str.length;
-        let newArray=[arrLen];
-        for(let i=0;i<operandList.length;i++)
-        {
-            for(let j=0;j<operandList[i].location.length;j++)
-            {
-                newArray[operandList[i].location[j]]=operandList[i].number;
-            }
-        }
-        
-        for(let k=0;k<opList.length;k++)
-        {
-            newArray[opList[k].opposition]=opList[k].operator;
-        
-        }
-        console.log(newArray);
-        return newArray;
-    }
-  
 
 
-
-   
 
     function division(strArray) {
+        if(strArray.includes('/'))
+        {
         if (strArray.length > 0) {
             for (let i = 0; i < strArray.length; i++) {
                 if (strArray[i] === '/') {
@@ -209,9 +107,13 @@ export function evalu(inputStr) {
             }
             return strArray;
         }
+    }
+    return strArray;
 
     }
     function multiply(strArray) {
+        if(strArray.includes('*'))
+        {
         if (strArray.length > 0) {
             for (let i = 0; i < strArray.length; i++) {
                 if (strArray[i] === '*') {
@@ -243,6 +145,7 @@ export function evalu(inputStr) {
             }
             return strArray;
         }
+    }return strArray;
     }
     function addsub(strArray) {
         let sum;
@@ -290,7 +193,7 @@ export function clearUnary(strArray)
         if (strArray[i] === '-' && i > 0 && strArray[i + 1] !== '(') {
 
             if ('(+*%/*-'.indexOf(strArray[i - 1]) >= 0)// This condtion will check if the unary operator 
-            // has a operaror has a operator before it replace it 
+            // has a operaror has  before it replace it 
             // by shifting to the next pl
             {
                 //console.log(`Before Element${strArray[i-1]}`);
@@ -324,4 +227,43 @@ export function clearUnary(strArray)
     }
     // console.log(strArray);
     return strArray;
+}
+function clearUnary1(strArray)
+ {
+
+
+    for (let i = 0; i < strArray.length; i++) {
+        if (strArray[0] === '-')// This condition for clearing unary operator when - is the 
+        //first number has unary operator.
+        {
+
+            strArray[1] = Number(strArray[1]) * -1;
+            strArray[0]=null;
+        }
+        if (strArray[i] === '-' ) {
+
+            if ('(+*%/*-'.indexOf(strArray[i - 1]) >= 0)// This condtion will check if the unary operator 
+            // has a operaror has  before it replace it 
+            // by shifting to the next pl
+            {
+                //console.log(`Before Element${strArray[i-1]}`);
+                //console.log(`After Element${strArray[i+1]}`);
+                strArray[i + 1] = strArray[i + 1] * -1;
+                strArray[i]=null;
+                // console.log(`modified element${strArray[i]}`)
+            }
+        }
+
+
+
+
+      
+
+            // console.log(`modified element${strArray[i]}`)
+
+        }
+        let newArray=strArray.filter(e=> {if(e!==null)
+        { return e}
+        });
+  return newArray;  
 }

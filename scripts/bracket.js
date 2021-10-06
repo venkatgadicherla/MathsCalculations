@@ -1,25 +1,37 @@
 import {evalu,clearUnary} from './twoop.js';
-function getclick()
-{
-    alert('HI');
-}
+
 document.querySelector('button').addEventListener('click', getResult);
 
 export function getResult()
 {
 let str=document.getElementById('expTxt').value;
-
-
-let newStrArray=str.split(/['()']+/);
-var strArray=clearUnary(str.split(''));
+let newstr;
+if(str.indexOf('**'))
+{
+    newstr= str.replace('**','^')
+}
+//let newStrArray=str.split(/['()']+/);
+// var strArray=clearUnary(newstr.split(''));
+var strArray=newstr.split('');
 console.log(strArray);
-var finalStr=resolveExp(strArray);
+var finalStr;
+debugger;
+if(strArray.includes('('))
+{
+ finalStr=resolveExp(strArray);
 console.log('Result'+finalStr);
+}
+else{
+console.log('Result'+finalStr);
+finalStr=evalu(strArray);
+}
 document.getElementById('resultTxt').value=finalStr;
 //console.log(newBracketarray);
 
 function findBrackets(strArray)
 {
+   
+   
     var bracketArray=[];
     function brackObject(bracket,postion)
     {
@@ -41,6 +53,8 @@ function findBrackets(strArray)
         }
     }
     return bracketArray;
+
+
 }
 function resolveExp(strArray)
 {
@@ -61,6 +75,8 @@ function resolveExp(strArray)
         this.startLocation=this.startLocation;
         this.length=length;
     }
+
+  
     newBracketArray=findBrackets(strArray);
     console.log('NewBracket Array'+newBracketArray);
     
